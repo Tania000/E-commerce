@@ -11,12 +11,13 @@ This project is a multi-page e-commerce website for showcasing clothes and elect
 
 ## Live Demonstration
 
-The E-commerce Website can be [viewed online here](https://tania000.github.io/E-commerce/).
+The E-commerce Website can be [viewed online here](https://tania000.github.io/E-commerce-/).
 
 Here is screenshot that show the E-commerce demo application in use.
 
 **Home Page**
-![Home Page!](https://github.com/user-attachments/assets/5e605fc8-10b8-41fb-ab32-f365e5f84cb6)
+![Home Page!](https://github.com/user-attachments/assets/3dec5459-82b3-4c4f-9572-d6f6bb179d30)
+
 
 
 
