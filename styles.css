@@ -14,14 +14,14 @@ body {
 
 a {
     text-decoration: none;
-
 }
 
 h1,
 h2,
 h3,
 h4,
-h6 {
+h6, 
+a {
     font-family: Mochiy Pop One;
 }
 
@@ -50,7 +50,6 @@ header a .logo {
     width: 650px;
     justify-content: space-evenly;
     align-items: center;
-
 }
 
 .navbar li {
@@ -197,7 +196,7 @@ header a .logo {
     color: red;
 }
 
-.banner-section button .btn {
+.banner-section .btn {
     color: #e27742;
     background-color: #fff;
     padding: 15px 30px;
