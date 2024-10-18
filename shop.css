@@ -1,0 +1,353 @@
+/*Products Section*/
+.products-section {
+    margin: 100px 0;
+    padding: 10px;
+    text-align: center;
+}
+
+.products-section h2 {
+    font-size: 40px;
+    color: #e27742;
+    margin-bottom: 50px;
+}
+
+.products-section .pro-list {
+    list-style-type: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 60px;
+    justify-content: center;
+    align-items: center;
+    padding: 0 125px;
+}
+
+.products-section .pro-list li .pro-card {
+    width: 100%;
+    padding: 21px;
+    border: 1px solid #f1f4f2;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.02);
+    transition: .3s;
+    overflow: hidden;
+    position: relative;
+}
+
+.products-section .pro-list li .pro-card:hover {
+    box-shadow: 20px 20px 30px rgba(0, 0, 0, 0.06);
+}
+
+.products-section .pro-list li .pro-card .image {
+    width: 100%;
+    padding: 3px 2px;
+}
+
+.products-section .pro-list li .pro-card img {
+    width: 300px;
+    height: 300px;
+    border-radius: 20px;
+    object-fit: contain;
+    transition: .3s;
+}
+
+.products-section .pro-list li .pro-card img:hover {
+    transform: scale(1.1);
+}
+
+.products-section .pro-list .pro-card .des {
+    text-align: left;
+    padding: 10px 0;
+}
+
+.products-section .pro-list .pro-card .des h4 {
+    text-align: center;
+    color: #e27742;
+    margin-bottom: 10px;
+}
+
+.products-section .pro-list .pro-card .des p {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.products-section .pro-list .pro-card .des .star i {
+    color: #D6A61F;
+}
+
+.products-section .pro-list .pro-card .des .price {
+    font-size: 18px;
+    margin-top: 15px;
+    font-weight: bold;
+    color: #02A2CD;
+}
+
+.products-section .pro-list .pro-card .cart i {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    border: 1px solid #2258eb41;
+    border-radius: 50px;
+    background-color: #02a1cd1a;
+    color: #e27742;
+    position: absolute;
+    bottom: 30px;
+    right: 25px;
+}
+
+/*Banner Section*/
+.banner-two {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 90px;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.banner-two .banner-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    text-align: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 45%;
+    height: 50vh;
+    padding: 50px;
+
+}
+
+.banner-two .one {
+    background-image: url(Images/banner/b2.png);
+    color: red;
+}
+
+.banner-two .two {
+    background-image: url(Images/banner/b3.jpg);
+    color: #fff;
+}
+
+.banner-two .three {
+    background-image: url(Images/banner/b4.png);
+    color: rgb(232, 20, 20);
+}
+
+.banner-two .four {
+    background-image: url(Images/banner/b5.png);
+    color: #fff;
+}
+
+.banner-two .banner-box h4 {
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.banner-two .banner-box h2 {
+    font-size: 32px;
+    font-weight: 800;
+    margin-bottom: 16px;
+}
+
+.banner-two .banner-box p {
+    font-size: 15px;
+    font-weight: 500;
+    margin-bottom: 18px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@media screen and (min-width:901px) and (max-width:1200px) {
+
+
+    /* Products Section*/
+    .products-section .pro-list {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 50px;
+    }
+
+    .products-section .pro-list li .pro-card {
+        width: 100%;
+    }
+
+    .products-section .pro-list li .pro-card img {
+        width: 236px;
+        height: 260px;
+    }
+
+    /*Banner Section*/
+    .banner-two {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .banner-two .banner-box {
+        width: 100%;
+        padding: 30px;
+        height: 30vh;
+        background-size: cover;
+    }
+
+    .banner-two .banner-box h4 {
+        font-size: 20px;
+    }
+
+    .banner-two .banner-box h2 {
+        font-size: 30px;
+        margin-bottom: 5px;
+    }
+}
+
+
+@media screen and (min-width:769px) and (max-width:900px) {
+
+
+
+    /* products Section*/
+    .products-section .pro-list {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 0 50px;
+    }
+
+    .products-section .pro-list li .pro-card {
+        width: 100%;
+    }
+
+    /*Banner Section*/
+    .banner-two {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .banner-two .banner-box {
+        width: 100%;
+        padding: 30px;
+        height: 26vh;
+        background-size: cover;
+    }
+}
+
+
+@media screen and (min-width:401px) and (max-width:768px) {
+
+    /*Products Section*/
+    .products-section h2 {
+        font-size: 30px;
+    }
+
+    .products-section .pro-list {
+        grid-template-columns: repeat(1, 1fr);
+        padding: 0 90px;
+    }
+
+    .products-section .pro-list li .pro-card {
+        width: 100%;
+    }
+
+    .products-section .pro-list li .pro-card img {
+        width: 236px;
+        height: 260px;
+    }
+
+    /*Banner Section*/
+    .banner-two {
+        flex-direction: column;
+        padding: 0;
+    }
+
+    .banner-two .banner-box {
+        width: 100%;
+        padding: 20px;
+        height: 26vh;
+        background-size: cover;
+        align-items: center;
+    }
+
+    .banner-two .banner-box h4 {
+        font-size: 18px;
+    }
+
+    .banner-two .banner-box h2 {
+        font-size: 23px;
+        margin-bottom: 10px;
+    }
+
+}
+
+@media screen and (max-width:400px) {
+
+
+    /*products Section*/
+    .products-section {
+        margin: 50px 0;
+    }
+
+    .products-section h2 {
+        font-size: 25px;
+    }
+
+
+    .products-section .pro-list {
+        grid-template-columns: repeat(1, 1fr);
+        padding: 0 10px;
+    }
+
+    .products-section.pro-list li .pro-card {
+        padding: 20px 5px;
+    }
+
+    .products-section .pro-list li .pro-card img {
+        width: 180px;
+        height: 200px;
+    }
+
+    .products-section .pro-list .pro-card .des h4 {
+        font-size: 13px;
+    }
+
+    .products-section .pro-list .pro-card .des p {
+        font-size: 12px;
+    }
+
+    /*Banner Section*/
+    .banner-two {
+        flex-direction: column;
+        padding: 0;
+        
+    }
+
+    .banner-two .banner-box {
+        width: 100%;
+        padding: 0;
+        align-items: center;
+        height: 26vh;
+        background-size: cover;
+    }
+
+    .banner-two .banner-box h4 {
+        font-size: 16px;
+    }
+
+    .banner-two .banner-box h2 {
+        font-size: 20px;
+        margin-bottom: 5px;
+    }
+
+        .banner-two .banner-box p {
+            font-size: 14px;
+        }
+}
