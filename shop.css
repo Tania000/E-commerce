@@ -10,6 +10,26 @@
     color: #e27742;
     margin-bottom: 50px;
 }
+/*Sorting Dropdown*/
+.sorting{
+text-align: right;
+margin: 40px;
+}
+
+.sorting label {
+    margin: 10px;
+    font-family: poppins;
+    font-size: 18px;
+}
+
+.sort-dropdown {
+    padding: 10px 15px;
+    font-size: 15px;
+    border-radius: 5px;
+    border: 1px solid #2258eb41;
+    background-color: #02a1cd1a;
+    color: #e27742;
+}
 
 .products-section .pro-list {
     list-style-type: none;

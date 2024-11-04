@@ -11,7 +11,7 @@ const products = [
   {
     id: 2,
     name: "Gaming Laptop",
-    price: "€1,499.99",
+    price: "€1500",
     description:
       "Boost your gaming experience with this gaming laptop. Equipped with a 15.6 display, NVIDIA graphics card, 16GB RAM, and 512GB SSD for fast loading times.",
     image: "Images/Products/11.png",
@@ -59,7 +59,7 @@ const products = [
   {
     id: 8,
     name: "Smartphone",
-    price: "$34.99",
+    price: "€34.99",
     description:
       "Stylish checkered shirt, perfect for semi-formal and casual occasions.",
     image: "Images/Products/15.png",
@@ -71,12 +71,14 @@ const products = [
     description:
       "Stay connected and track your health with this waterproof smartwatch. Features include heart-rate monitoring, GPS tracking.",
     image: "Images/Products/16.png",
-  }
+  },
 ];
 
 // Function to generate product elements
 function generateProductElements() {
-  const productContainer = document.querySelector("section ul");            
+  const productContainer = document.querySelector("section ul");
+  // Clear the product container to avoid duplicates
+  productContainer.innerHTML = "";
   products.forEach((product) => {
     const productElement = document.createElement("li");
     productElement.innerHTML = `
@@ -105,3 +107,35 @@ function generateProductElements() {
 
 // Call the function to generate product elements when the DOM is fully loaded(meaning: wait until the page is ready before doing something)
 document.addEventListener("DOMContentLoaded", generateProductElements);
+
+document.addEventListener("DOMContentLoaded", () => {
+  const sortDropdown = document.getElementById("sort");
+  const productList = document.querySelector(".pro-list");
+  const products = Array.from(productList.children);
+
+  sortDropdown.addEventListener("change", () => {
+    const sortOrder = sortDropdown.value;
+    console.log("Original order:", products);
+    const sortedProducts = products.sort((a, b) => {
+      const priceA = parseFloat(a.querySelector(".price").textContent.replace("€", ""));
+      const priceB = parseFloat(b.querySelector(".price").textContent.replace("€", ""));
+
+      if (sortOrder === "asc") {
+        return priceA - priceB;
+      } else {
+        return priceB - priceA;
+      }
+    });
+    console.log("Sorted order:", sortedProducts);
+
+    // Clear the product list
+    while (productList.firstChild) {
+      productList.removeChild(productList.firstChild);
+    }
+
+    // Append the sorted products
+    sortedProducts.forEach((product) => {
+      productList.appendChild(product);
+    });
+  });
+});

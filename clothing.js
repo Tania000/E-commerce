@@ -76,10 +76,14 @@ const products = [
 
 // Function to generate product elements
 
-function generateProductElements() {                                                 //Creating a bunch of "product cards"
-  const productContainer = document.querySelector("section ul");                     //(1) Looking for a specific place to put the cards (section/ul)
-  products.forEach((product) => {                                                    //(2) Going through each product in the list of products
-  const productElement = document.createElement("li");                               //# Creating a new list item (li), like making an empty card     //# then Filling the product card
+function generateProductElements() {
+  //Creating a bunch of "product cards"
+  //(1) Looking for a specific place to put the cards (section/ul)
+  const productContainer = document.querySelector("section ul");
+  // Clear the product container to avoid duplicates
+  productContainer.innerHTML = "";
+  products.forEach((product) => {
+    const productElement = document.createElement("li");    //# Creating a new list item (li), like making an empty card     //# then Filling the product card
     productElement.innerHTML = ` 
      <div class="pro-card">
                     <div class="image">
@@ -100,9 +104,48 @@ function generateProductElements() {                                            
                     <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
     `;
-    productContainer.appendChild(productElement);                                            //# Adding the card list(child) to the container(parent)
+    productContainer.appendChild(productElement); //# Adding the card list(child) to the container(parent)
   });
 }
 
 // Call the function to generate product elements when the DOM is fully loaded(meaning: wait until the page is ready before doing something)
 document.addEventListener("DOMContentLoaded", generateProductElements);
+/////////////////////////////////////////////////////////////////
+//Sorting The Products
+
+document.addEventListener("DOMContentLoaded", () => {
+  const sortDropdown = document.getElementById("sort");
+  const productList = document.querySelector(".pro-list");
+  const products = Array.from(productList.children);
+
+  sortDropdown.addEventListener("change", () => {
+    const sortOrder = sortDropdown.value;
+    console.log("Original order:", products);
+    const sortedProducts = products.sort((a, b) => {
+      const priceA = parseFloat(
+        a.querySelector(".price").textContent.replace("€", "")
+      );
+      const priceB = parseFloat(
+        b.querySelector(".price").textContent.replace("€", "")
+      );
+
+      if (sortOrder === "asc") {
+        return priceA - priceB;
+      } else {
+        return priceB - priceA;
+      }
+    });
+    console.log("Sorted order:", sortedProducts);
+
+    // Clear the product list
+    while (productList.firstChild) {
+      productList.removeChild(productList.firstChild);
+    }
+
+    // Append the sorted products
+    sortedProducts.forEach((product) => {
+      productList.appendChild(product);
+    });
+  });
+});
+
