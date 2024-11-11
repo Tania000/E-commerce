@@ -22,19 +22,20 @@
             <li><a href="index.html">Home</a></li>
             <li><a class="active" href="clothing.html">Clothing</a></li>
             <li><a href="electronics.html">Electronics</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <li id="cartLink"><a href="#"><i class="fa-solid fa-cart-shopping"></i></a></li>
         </ul>
     </header>
     <!--Products Section-->
     <section class="products-section">
         <h2>Our Products</h2>
-            <div class="sorting">
-                <label for="sort">Sort by Price:</label>
-                <select name="sort" id="sort" class="sort-dropdown">
-                    <option value="asc">Ascending</option>
-                    <option value="desc">Descending</option>
-                </select>
-            </div>
+        <!--Products Section / Sorting Products-->
+        <div class="sorting">
+            <label for="sort">Sort by Price:</label>
+            <select name="sort" id="sort" class="sort-dropdown">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+        </div>
         <ul class="pro-list">
             <li>
                 <div class="pro-card">
@@ -42,18 +43,13 @@
                         <img src="Images/Products/1.png" alt="White T-Shirt">
                     </div>
                     <div class="des">
-                        <h4>Classic White T-Shirt</h4>
+                        <h4 class="product-name">Classic White T-Shirt</h4>
                         <p>A timeless white T-shirt made from 100% cotton. Perfect for casual wear.</p>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <p class="price">€19.99</p>
+                        <div class="group-cart">
+                            <p class="product-price">€19.99</p>
+                            <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
                         </div>
                     </div>
-                    <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
             </li>
             <li>
@@ -62,18 +58,13 @@
                         <img src="Images/Products/2.jpg" alt="Blue Denim Jeans">
                     </div>
                     <div class="des">
-                        <h4>Blue Denim Jeans</h4>
+                        <h4 class="product-name">Blue Denim Jeans</h4>
                         <p>High-quality denim jeans with a slim fit design. Ideal for pairing with any top.</p>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <p class="price">€49.99</p>
+                        <div class="group-cart">
+                            <p class="product-price">€49.99</p>
+                            <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
                         </div>
                     </div>
-                    <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
             </li>
             <li>
@@ -82,18 +73,13 @@
                         <img src="Images/Products/3.png" alt="Gray Hoodie">
                     </div>
                     <div class="des">
-                        <h4>Gray Hoodie</h4>
+                        <h4 class="product-name">Gray Hoodie</h4>
                         <p>Soft and cozy hoodie with front pockets. Available in various sizes.</p>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <p class="price">€39.99</p>
+                        <div class="group-cart">
+                            <p class="product-price">€39.99</p>
+                            <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
                         </div>
                     </div>
-                    <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
             </li>
             <li>
@@ -102,18 +88,13 @@
                         <img src="Images/Products/4.png" alt="Sports Tracksuit">
                     </div>
                     <div class="des">
-                        <h4>Sports Tracksuit</h4>
+                        <h4 class="product-name">Sports Tracksuit</h4>
                         <p>A comfortable sports tracksuit made with moisture-wicking fabric. Ideal for workouts.</p>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <p class="price">€59.99</p>
+                        <div class="group-cart">
+                            <p class="product-price">€59.99</p>
+                            <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
                         </div>
                     </div>
-                    <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
             </li>
             <li>
@@ -122,18 +103,13 @@
                         <img src="Images/Products/5.png" alt="Red Cocktail Dress">
                     </div>
                     <div class="des">
-                        <h4>Red Cocktail Dress</h4>
+                        <h4 class="product-name">Red Cocktail Dress</h4>
                         <p>An elegant red dress, perfect for evening events. Made from premium silk fabric.</p>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <p class="price">€80</p>
+                        <div class="group-cart">
+                            <p class="product-price">€80</p>
+                            <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
                         </div>
                     </div>
-                    <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
             </li>
             <li>
@@ -142,18 +118,13 @@
                         <img src="Images/Products/6.png" alt="Black Leather Jacket">
                     </div>
                     <div class="des">
-                        <h4>Black Leather Jacket</h4>
+                        <h4 class="product-name">Black Leather Jacket</h4>
                         <p>A classic black leather jacket with a slim-fit design. Great for a bold, stylish look.</p>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <p class="price">€79.99</p>
+                        <div class="group-cart">
+                            <p class="product-price">€79.99</p>
+                            <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
                         </div>
                     </div>
-                    <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
             </li>
             <li>
@@ -162,18 +133,13 @@
                         <img src="Images/Products/7.png" alt="Summer Floral Dress">
                     </div>
                     <div class="des">
-                        <h4>Summer Floral Dress</h4>
+                        <h4 class="product-name">Summer Floral Dress</h4>
                         <p>Light floral dress, perfect for warm weather. Made from breathable fabric.</p>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <p class="price">€29.99</p>
+                        <div class="group-cart">
+                            <p class="product-price">€29.99</p>
+                            <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
                         </div>
                     </div>
-                    <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
             </li>
             <li>
@@ -182,18 +148,13 @@
                         <img src="Images/Products/8.png" alt="Men's Checkered Shirt"">
                         </div>
                         <div class=" des">
-                        <h4>Men's Checkered Shirt"</h4>
+                        <h4 class="product-name">Men's Checkered Shirt"</h4>
                         <p>Stylish checkered shirt, perfect for semi-formal and casual occasions.</p>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <p class="price">€34.99</p>
+                        <div class="group-cart">
+                            <p class="product-price">€34.99</p>
+                            <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
                         </div>
                     </div>
-                    <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
             </li>
             <li>
@@ -202,22 +163,25 @@
                         <img src="Images/Products/9.png" alt="Women's Trench Coat">
                     </div>
                     <div class="des">
-                        <h4>Women's Trench Coat</h4>
+                        <h4 class="product-name">Women's Trench Coat</h4>
                         <p>A sophisticated trench coat with waist belt. Perfect for colder days.</p>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <p class="price">€19.99</p>
+                        <div class="group-cart">
+                            <p class="product-price">€19.99</p>
+                            <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
                         </div>
                     </div>
-                    <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
             </li>
         </ul>
     </section>
+    <!--Model Cart-->
+    <div id="modalCart" class="modal-cart">
+        <div class="modal-cart-content">
+            <span class="modal-cart-close">&times;</span>
+            <h1>Cart</h1>
+            <p>...</p>
+        </div>
+    </div>
     <!--Banner Section-->
     <section class="banner-two">
         <div class="banner-box one">

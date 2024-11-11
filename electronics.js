@@ -87,18 +87,13 @@ function generateProductElements() {
                         <img src="${product.image}" alt="${product.name}">
                     </div>
                     <div class="des">
-                        <h4>${product.name}</h4>
+                        <h4 class ="product-name">${product.name}</h4>
                         <p>${product.description}</p>
-                        <div class="star">
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <i class="fa-solid fa-star"></i>
-                            <p class="price">${product.price}</p>
+                        <div class="group-cart">
+                            <p class="product-price">${product.price}</p>
+                            <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
                         </div>
                     </div>
-                    <a href="#" class="cart"><i class="fa-solid fa-cart-shopping"></i></a>
                 </div>
     `;
     productContainer.appendChild(productElement);
@@ -108,6 +103,8 @@ function generateProductElements() {
 // Call the function to generate product elements when the DOM is fully loaded(meaning: wait until the page is ready before doing something)
 document.addEventListener("DOMContentLoaded", generateProductElements);
 
+/////////////////////////////////////////////////////////////////
+//Sorting The Products
 document.addEventListener("DOMContentLoaded", () => {
   const sortDropdown = document.getElementById("sort");
   const productList = document.querySelector(".pro-list");
@@ -138,4 +135,82 @@ document.addEventListener("DOMContentLoaded", () => {
       productList.appendChild(product);
     });
   });
+});
+
+/////////////////////////////////////////////////////////////
+//Milestone 3
+document.addEventListener("DOMContentLoaded", function () {
+  /////// (1) Get the element we need
+  const modalCart = document.getElementById("modalCart");
+  const closeBtn = document.getElementsByClassName("modal-cart-close")[0];
+  const cartDisplay = document.querySelector(".modal-cart-content p");
+  const cartLink = document.getElementById("cartLink");
+  const cartItems = [];
+
+  ///////// (2)Click on the cart icon in the navbar to open the modal
+  cartLink.onclick = function () {
+    modalCart.style.display = "block";
+    setTimeout(function () {
+      modalCart.classList.add("show");
+    }, 10);
+    updateCartDisplay();
+  };
+  ///////// (3)Close the cart model by x
+  closeBtn.onclick = function () {
+    modalCart.classList.remove("show");
+    setTimeout(function () {
+      modalCart.style.display = "none";
+    }, 300);
+  };
+  ///////// (3)Close the cart model when click outside
+  window.onclick = function (event) {
+    if (event.target == modalCart) {
+      modalCart.classList.remove("show");
+      setTimeout(function () {
+        modalCart.style.display = "none";
+      }, 300);
+    }
+  };
+  ////////////////////////(4) Add to cart icon
+  const addToCartButtons = document.querySelectorAll(".product-buy");
+  addToCartButtons.forEach(function (button) {
+    button.addEventListener("click", function (event) {
+      const product = event.target.closest(".pro-card");
+      const productName = product.querySelector(".product-name").textContent;
+      const productPrice = product.querySelector(".product-price").textContent;
+
+      cartItems.push({
+        name: productName,
+        price: productPrice,
+      });
+
+      displayConfirmation(productName);
+      updateCartDisplay();
+    });
+  });
+  ///////////////(5) Updating the cart's display
+  function updateCartDisplay() {
+    if (cartItems.length === 0) {
+      cartDisplay.textContent = "Your cart is empty.";
+    } else {
+      cartDisplay.innerHTML = `
+        <ul> 
+        ${cartItems
+          .map((item) => `<li>${item.name} - ${item.price}</li>`)
+          .join("")} 
+        </ul>
+        `;
+    }
+  }
+  ////////////////(6) Message displayConfirmation
+  function displayConfirmation(productName) {
+    const confirmation = document.createElement("div");
+    confirmation.className = "confirmation-message";
+    confirmation.textContent = `${productName} has been added to the cart.`;
+    document.body.appendChild(confirmation);
+
+    setTimeout(function () {
+      confirmation.remove();
+    }, 3000);
+  }
 });
