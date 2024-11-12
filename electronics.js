@@ -114,8 +114,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const sortOrder = sortDropdown.value;
     console.log("Original order:", products);
     const sortedProducts = products.sort((a, b) => {
-      const priceA = parseFloat(a.querySelector(".price").textContent.replace("€", ""));
-      const priceB = parseFloat(b.querySelector(".price").textContent.replace("€", ""));
+      const priceA = parseFloat(
+        a.querySelector(".price").textContent.replace("€", "")
+      );
+      const priceB = parseFloat(
+        b.querySelector(".price").textContent.replace("€", "")
+      );
 
       if (sortOrder === "asc") {
         return priceA - priceB;
@@ -145,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeBtn = document.getElementsByClassName("modal-cart-close")[0];
   const cartDisplay = document.querySelector(".modal-cart-content p");
   const cartLink = document.getElementById("cartLink");
-  const cartItems = [];
+  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || []; // Load cart items from localStorage or make a  empty array if there’s no data in localStorage
 
   ///////// (2)Click on the cart icon in the navbar to open the modal
   cartLink.onclick = function () {
@@ -183,7 +187,8 @@ document.addEventListener("DOMContentLoaded", function () {
         name: productName,
         price: productPrice,
       });
-
+      ///// Save cart items to localStorage, and save the updated array to localStorage
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
       displayConfirmation(productName);
       updateCartDisplay();
     });
@@ -194,15 +199,32 @@ document.addEventListener("DOMContentLoaded", function () {
       cartDisplay.textContent = "Your cart is empty.";
     } else {
       cartDisplay.innerHTML = `
-        <ul> 
-        ${cartItems
-          .map((item) => `<li>${item.name} - ${item.price}</li>`)
-          .join("")} 
+        <ul>
+          ${cartItems
+            .map(
+              (item, index) => `
+              <li>
+                ${item.name} - ${item.price} 
+                <span class="delete-item" data-index="${index}"><i class="fa-solid fa-trash"></i></span>
+              </li>`
+            )
+            .join("")}
         </ul>
-        `;
+      `;
+      /////////////////////////////// Delete items from the cart
+      const itemDeleteBtns = document.querySelectorAll(".delete-item");
+      itemDeleteBtns.forEach(function (button) {
+        button.addEventListener("click", function () {
+          const index = button.getAttribute("data-index");
+          cartItems.splice(index, 1); // Remove item from cartItems
+          localStorage.setItem("cartItems", JSON.stringify(cartItems)); // Update localStorage
+          updateCartDisplay(); ////Refresh cart display after deletion
+        });
+      });
     }
   }
-  ////////////////(6) Message displayConfirmation
+
+  ////////////////(7) Message displayConfirmation
   function displayConfirmation(productName) {
     const confirmation = document.createElement("div");
     confirmation.className = "confirmation-message";
@@ -213,4 +235,7 @@ document.addEventListener("DOMContentLoaded", function () {
       confirmation.remove();
     }, 3000);
   }
+
+  //////////////// (8) Load cart items from localStorage on page load
+  updateCartDisplay();
 });

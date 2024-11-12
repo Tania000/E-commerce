@@ -158,6 +158,12 @@
 .modal-cart .modal-cart-content ul {
     margin-left: 30px;
 }
+.modal-cart .modal-cart-content ul .delete-item {
+    cursor: pointer;
+    color: #e27742;
+    margin-left: 20px;
+    font-size: 20px;
+}
 /* Confirmation Message  */
 .confirmation-message {
     position: fixed;
