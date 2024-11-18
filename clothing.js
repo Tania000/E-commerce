@@ -143,48 +143,7 @@ document.addEventListener("DOMContentLoaded",function () {
   });
 });
 
-
-
 //TODO===============================================
-//!Bonus Milestone: Add a search bar
-document.addEventListener("DOMContentLoaded", () => {
-  const searchBar = document.getElementById("searchInput"); // Search input
-  const productContainer = document.querySelector("section ul"); // Product list container
-
-  // Search functionality
-  searchBar.addEventListener("input", (event) => {
-    const searchQuery = event.target.value.toLowerCase();
-
-    // Filter products based on the search query
-    const filteredProducts = products.filter((product) =>
-      product.name.toLowerCase().includes(searchQuery)
-    );
-
-    // Clear the product list and display only the filtered products
-    productContainer.innerHTML = "";
-    filteredProducts.forEach((product) => {
-      const productElement = document.createElement("li");
-      productElement.innerHTML = `
-      <div class="pro-card">
-                      <div class="image">
-                          <img src="${product.image}" alt="${product.name}">
-                      </div>
-                      <div class="des">
-                          <h4 class ="product-name">${product.name}</h4>
-                          <p>${product.description}</p>
-                          <div class="group-cart">
-                              <p class="product-price">${product.price}</p>
-                              <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
-                          </div>
-                      </div>
-                  </div>
-      `;
-      productContainer.appendChild(productElement);
-    });
-  });
-});
-
-//TODO =================================================
 //!Milestone(3): Add items to the cart
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -193,8 +152,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const cartDisplay = document.querySelector(".modal-cart-content p");
   const cartLink = document.getElementById("cartLink");
   const cartItemCount = document.getElementById("cartItemCount");
-  const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+  const cartItems = JSON.parse(localStorage.getItem("cartItems")) || []; // Retrieves the cart data stored in the browser's local storage and converts it into a usable format (an array of objects).If no data exists in localStorage, it initializes an empty array ([])
   let totalPrice = 0;
+
+  //TODO Open And Close The Modal Cart ===============================
 
   cartLink.onclick = function () {
     modalCart.style.display = "block";
@@ -220,35 +181,42 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   };
 
-  const addToCartButtons = document.querySelectorAll(".product-buy");
-  addToCartButtons.forEach(function (button) {
-    button.addEventListener("click", function (event) {
-      const product = event.target.closest(".pro-card");
-      const productImg = product.querySelector(".image img");
-      const productName = product.querySelector(".product-name").textContent;
-      const productPrice = parseFloat(
-        product.querySelector(".product-price").textContent.replace("€", "")
-      );
+  //TODO Add To Cart Function =================================
+  // Function to reattach "Add to Cart" listeners
+  function addToCart() {
+    const addToCartButtons = document.querySelectorAll(".product-buy");
+    addToCartButtons.forEach(function (button) {
+      button.addEventListener("click", function (event) {
+        const product = event.target.closest(".pro-card");
+        const productImg = product.querySelector(".image img").src;
+        const productName = product.querySelector(".product-name").textContent;
+        const productPrice = parseFloat(
+          product.querySelector(".product-price").textContent.replace("€", "")
+        );
 
-      const existingItem = cartItems.find((item) => item.name === productName);
-      if (existingItem) {
-        existingItem.quantity += 1;
-      } else {
-        cartItems.push({
-          image: productImg.src,
-          name: productName,
-          price: productPrice,
-          quantity: 1,
-        });
-      }
+        const existingItem = cartItems.find(
+          (item) => item.name === productName
+        );
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cartItems.push({
+            image: productImg,
+            name: productName,
+            price: productPrice,
+            quantity: 1,
+          });
+        }
 
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      updateCartDisplay();
-      updateCartCount();
-      displayConfirmation(productName);
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+        updateCartDisplay();
+        updateCartCount();
+        displayConfirmation(productName);
+      });
     });
-  });
+  }
 
+  //TODO  Update Cart Display Function ==================================
   function updateCartDisplay() {
     totalPrice = 0;
 
@@ -277,7 +245,10 @@ document.addEventListener("DOMContentLoaded", function () {
         </ul>
       `;
 
+      //Calculating the Total Price
       cartItems.forEach((item) => (totalPrice += item.price * item.quantity));
+
+      //Updating the Total Price Display
       document.querySelector(
         ".total-price"
       ).textContent = `€${totalPrice.toFixed(2)}`;
@@ -285,6 +256,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }
+
+  //TODO Update Cart Count Function =========================
 
   function updateCartCount() {
     const totalItems = cartItems.reduce(
@@ -294,6 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cartItemCount.textContent = totalItems;
   }
 
+  //TODO Increase The Quantity Input ================
   cartDisplay.addEventListener("change", function (event) {
     if (event.target.classList.contains("quantity-input")) {
       const index = event.target.getAttribute("data-index");
@@ -303,16 +277,20 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
+  //TODO Delete Items From The Cart ===============
   cartDisplay.addEventListener("click", function (event) {
-    // Check if the delete icon or its parent was clicked
-    if (event.target.closest(".delete-item")) {
-      const index = event.target.closest(".delete-item").dataset.index;
-      cartItems.splice(index, 1); // Remove item from cart
-      updateCartDisplay(); // Update the cart display
-      updateCartCount(); // Update the item count
+    // Check if the click is on or inside a delete button
+    const deleteButton = event.target.closest(".delete-item");
+    if (deleteButton) {
+      const index = deleteButton.getAttribute("data-index"); // Get the data-index
+      cartItems.splice(index, 1); // Remove the item from cart
+      updateCartDisplay();
+      updateCartCount();
     }
   });
-  ////////////////(7) Message displayConfirmation
+
+  //TODO Message display Confirmation Function ================
+
   function displayConfirmation(productName) {
     const confirmation = document.createElement("div");
     confirmation.className = "confirmation-message";
@@ -323,9 +301,53 @@ document.addEventListener("DOMContentLoaded", function () {
       confirmation.remove();
     }, 3000);
   }
-  updateCartDisplay();
-  updateCartCount();
+    //TODO===============================================
+    //!Bonus Milestone: Add a search bar
+
+    const searchBar = document.getElementById("searchInput"); // Search input
+    const productContainer = document.querySelector("section ul");
+
+    // Search functionality
+    searchBar.addEventListener("input", (event) => {
+      const searchQuery = event.target.value.toLowerCase();
+
+      // Filter products based on the search query
+      const filteredProducts = products.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery)
+      );
+
+      // Clear the product list and display only the filtered products
+      productContainer.innerHTML = "";
+      filteredProducts.forEach((product) => {
+        const productElement = document.createElement("li");
+        productElement.innerHTML = `
+      <div class="pro-card">
+                      <div class="image">
+                          <img src="${product.image}" alt="${product.name}">
+                      </div>
+                      <div class="des">
+                          <h4 class ="product-name">${product.name}</h4>
+                          <p>${product.description}</p>
+                          <div class="group-cart">
+                              <p class="product-price">${product.price}</p>
+                              <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
+                          </div>
+                      </div>
+                  </div>
+      `;
+        productContainer.appendChild(productElement);
+      });
+
+      addToCart();
+    });
+
+    addToCart();
+    updateCartDisplay();
+    updateCartCount();
+  
 });
+
+
 
 
 

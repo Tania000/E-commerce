@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", generateProductElements);
 //!Milestone(2): Sorting Products
 
 //* Sorting The Products
-document.addEventListener("DOMContentLoaded",function () {
+document.addEventListener("DOMContentLoaded", function () {
   const sortDropdown = document.getElementById("sort");
   const productList = document.querySelector("section ul");
 
@@ -151,12 +151,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeBtn = document.getElementsByClassName("modal-cart-close")[0];
   const cartDisplay = document.querySelector(".modal-cart-content p");
   const cartLink = document.getElementById("cartLink");
-  const cartItemCount = document.getElementById("cartItemCount"); 
-  const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];// Retrieves the cart data stored in the browser's local storage and converts it into a usable format (an array of objects).If no data exists in localStorage, it initializes an empty array ([])
+  const cartItemCount = document.getElementById("cartItemCount");
+  const cartItems = JSON.parse(localStorage.getItem("cartItems")) || []; // Retrieves the cart data stored in the browser's local storage and converts it into a usable format (an array of objects).If no data exists in localStorage, it initializes an empty array ([])
   let totalPrice = 0;
 
   //TODO Open And Close The Modal Cart ===============================
-  
+
   cartLink.onclick = function () {
     modalCart.style.display = "block";
     setTimeout(function () {
@@ -182,37 +182,41 @@ document.addEventListener("DOMContentLoaded", function () {
   };
 
   //TODO Add To Cart Function =================================
-  
-  const addToCartButtons = document.querySelectorAll(".product-buy");
-  addToCartButtons.forEach(function (button) {
-    button.addEventListener("click", function (event) {
-      const product = event.target.closest(".pro-card");
-      const productImg = product.querySelector(".image img").src;
-      const productName = product.querySelector(".product-name").textContent;
-      const productPrice = parseFloat(
-        product.querySelector(".product-price").textContent.replace("€", "")
-      );
+  // Function to reattach "Add to Cart" listeners
+  function addToCart() {
+    const addToCartButtons = document.querySelectorAll(".product-buy");
+    addToCartButtons.forEach(function (button) {
+      button.addEventListener("click", function (event) {
+        const product = event.target.closest(".pro-card");
+        const productImg = product.querySelector(".image img").src;
+        const productName = product.querySelector(".product-name").textContent;
+        const productPrice = parseFloat(
+          product.querySelector(".product-price").textContent.replace("€", "")
+        );
 
-      const existingItem = cartItems.find((item) => item.name === productName);
-      if (existingItem) {
-        existingItem.quantity += 1;
-      } else {
-        cartItems.push({
-          image: productImg,
-          name: productName,
-          price: productPrice,
-          quantity: 1,
-        });
-      }
+        const existingItem = cartItems.find(
+          (item) => item.name === productName
+        );
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cartItems.push({
+            image: productImg,
+            name: productName,
+            price: productPrice,
+            quantity: 1,
+          });
+        }
 
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      updateCartDisplay();
-      updateCartCount();
-      displayConfirmation(productName);
+        localStorage.setItem("cartItems", JSON.stringify(cartItems));
+        updateCartDisplay();
+        updateCartCount();
+        displayConfirmation(productName);
+      });
     });
-  });
+  }
 
-//TODO  Update Cart Display Function ==================================
+  //TODO  Update Cart Display Function ==================================
   function updateCartDisplay() {
     totalPrice = 0;
 
@@ -240,10 +244,10 @@ document.addEventListener("DOMContentLoaded", function () {
             .join("")}
         </ul>
       `;
-      
+
       //Calculating the Total Price
       cartItems.forEach((item) => (totalPrice += item.price * item.quantity));
-      
+
       //Updating the Total Price Display
       document.querySelector(
         ".total-price"
@@ -254,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   //TODO Update Cart Count Function =========================
-  
+
   function updateCartCount() {
     const totalItems = cartItems.reduce(
       (count, item) => count + item.quantity,
@@ -263,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cartItemCount.textContent = totalItems;
   }
 
-//TODO Increase The Quantity Input ================
+  //TODO Increase The Quantity Input ================
   cartDisplay.addEventListener("change", function (event) {
     if (event.target.classList.contains("quantity-input")) {
       const index = event.target.getAttribute("data-index");
@@ -280,14 +284,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (deleteButton) {
       const index = deleteButton.getAttribute("data-index"); // Get the data-index
       cartItems.splice(index, 1); // Remove the item from cart
-      updateCartDisplay(); 
-      updateCartCount(); 
+      updateCartDisplay();
+      updateCartCount();
     }
   });
 
-  
-
-//TODO Message display Confirmation Function ================
+  //TODO Message display Confirmation Function ================
 
   function displayConfirmation(productName) {
     const confirmation = document.createElement("div");
@@ -299,30 +301,26 @@ document.addEventListener("DOMContentLoaded", function () {
       confirmation.remove();
     }, 3000);
   }
-  updateCartDisplay();
-  updateCartCount();
-});
+    //TODO===============================================
+    //!Bonus Milestone: Add a search bar
 
-//TODO===============================================
-//!Bonus Milestone: Add a search bar
-document.addEventListener("DOMContentLoaded", () => {
-  const searchBar = document.getElementById("searchInput"); // Search input
-  const productContainer = document.querySelector("section ul"); 
+    const searchBar = document.getElementById("searchInput"); // Search input
+    const productContainer = document.querySelector("section ul");
 
-  // Search functionality
-  searchBar.addEventListener("input", (event) => {
-    const searchQuery = event.target.value.toLowerCase();
+    // Search functionality
+    searchBar.addEventListener("input", (event) => {
+      const searchQuery = event.target.value.toLowerCase();
 
-    // Filter products based on the search query
-    const filteredProducts = products.filter((product) =>
-      product.name.toLowerCase().includes(searchQuery)
-    );
+      // Filter products based on the search query
+      const filteredProducts = products.filter((product) =>
+        product.name.toLowerCase().includes(searchQuery)
+      );
 
-    // Clear the product list and display only the filtered products
-    productContainer.innerHTML = "";
-    filteredProducts.forEach((product) => {
-      const productElement = document.createElement("li");
-      productElement.innerHTML = `
+      // Clear the product list and display only the filtered products
+      productContainer.innerHTML = "";
+      filteredProducts.forEach((product) => {
+        const productElement = document.createElement("li");
+        productElement.innerHTML = `
       <div class="pro-card">
                       <div class="image">
                           <img src="${product.image}" alt="${product.name}">
@@ -337,7 +335,14 @@ document.addEventListener("DOMContentLoaded", () => {
                       </div>
                   </div>
       `;
-      productContainer.appendChild(productElement);
+        productContainer.appendChild(productElement);
+      });
+
+      addToCart();
     });
-  });
+
+    addToCart();
+    updateCartDisplay();
+    updateCartCount();
+  
 });
