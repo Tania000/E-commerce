@@ -59,7 +59,7 @@ const products = [
   {
     id: 8,
     name: "Smartphone",
-    price: "€34.99",
+    price: "€999.99",
     description:
       "Stylish checkered shirt, perfect for semi-formal and casual occasions.",
     image: "Images/Products/15.png",
@@ -77,8 +77,10 @@ const products = [
 // Function to generate product elements
 function generateProductElements() {
   const productContainer = document.querySelector("section ul");
+
   // Clear the product container to avoid duplicates
   productContainer.innerHTML = "";
+
   products.forEach((product) => {
     const productElement = document.createElement("li");
     productElement.innerHTML = `
@@ -103,22 +105,27 @@ function generateProductElements() {
 // Call the function to generate product elements when the DOM is fully loaded(meaning: wait until the page is ready before doing something)
 document.addEventListener("DOMContentLoaded", generateProductElements);
 
-/////////////////////////////////////////////////////////////////
-//Sorting The Products
-document.addEventListener("DOMContentLoaded", () => {
-  const sortDropdown = document.getElementById("sort");
-  const productList = document.querySelector(".pro-list");
-  const products = Array.from(productList.children);
+//TODO===============================================
+//!Milestone(2): Sorting Products
 
-  sortDropdown.addEventListener("change", () => {
-    const sortOrder = sortDropdown.value;
-    console.log("Original order:", products);
-    const sortedProducts = products.sort((a, b) => {
+//* Sorting The Products
+document.addEventListener("DOMContentLoaded",function () {
+  const sortDropdown = document.getElementById("sort");
+  const productList = document.querySelector("section ul");
+
+  sortDropdown.addEventListener("change", function () {
+    const sortOrder = sortDropdown.value; // Get "asc" or "desc" from the dropdown
+
+    // Turn product items(li) into an array
+    const products = Array.from(productList.children);
+
+    // Sorting the products by price
+    const sortedProducts = products.sort(function (a, b) {
       const priceA = parseFloat(
-        a.querySelector(".price").textContent.replace("€", "")
+        a.querySelector(".product-price").textContent.replace("€", "")
       );
       const priceB = parseFloat(
-        b.querySelector(".price").textContent.replace("€", "")
+        b.querySelector(".product-price").textContent.replace("€", "")
       );
 
       if (sortOrder === "asc") {
@@ -127,31 +134,29 @@ document.addEventListener("DOMContentLoaded", () => {
         return priceB - priceA;
       }
     });
-    console.log("Sorted order:", sortedProducts);
 
     // Clear the product list
-    while (productList.firstChild) {
-      productList.removeChild(productList.firstChild);
-    }
+    productList.innerHTML = "";
 
-    // Append the sorted products
-    sortedProducts.forEach((product) => {
-      productList.appendChild(product);
-    });
+    // Add the sorted products back to the page
+    sortedProducts.forEach((product) => productList.appendChild(product));
   });
 });
 
-/////////////////////////////////////////////////////////////
-//Milestone 3
+//TODO===============================================
+//!Milestone(3): Add items to the cart
+
 document.addEventListener("DOMContentLoaded", function () {
-  /////// (1) Get the element we need
   const modalCart = document.getElementById("modalCart");
   const closeBtn = document.getElementsByClassName("modal-cart-close")[0];
   const cartDisplay = document.querySelector(".modal-cart-content p");
   const cartLink = document.getElementById("cartLink");
-  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || []; // Load cart items from localStorage or make a  empty array if there’s no data in localStorage
+  const cartItemCount = document.getElementById("cartItemCount"); 
+  const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];// Retrieves the cart data stored in the browser's local storage and converts it into a usable format (an array of objects).If no data exists in localStorage, it initializes an empty array ([])
+  let totalPrice = 0;
 
-  ///////// (2)Click on the cart icon in the navbar to open the modal
+  //TODO Open And Close The Modal Cart ===============================
+  
   cartLink.onclick = function () {
     modalCart.style.display = "block";
     setTimeout(function () {
@@ -159,14 +164,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 10);
     updateCartDisplay();
   };
-  ///////// (3)Close the cart model by x
+
   closeBtn.onclick = function () {
     modalCart.classList.remove("show");
     setTimeout(function () {
       modalCart.style.display = "none";
     }, 300);
   };
-  ///////// (3)Close the cart model when click outside
+
   window.onclick = function (event) {
     if (event.target == modalCart) {
       modalCart.classList.remove("show");
@@ -175,56 +180,115 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 300);
     }
   };
-  ////////////////////////(4) Add to cart icon
+
+  //TODO Add To Cart Function =================================
+  
   const addToCartButtons = document.querySelectorAll(".product-buy");
   addToCartButtons.forEach(function (button) {
     button.addEventListener("click", function (event) {
       const product = event.target.closest(".pro-card");
+      const productImg = product.querySelector(".image img").src;
       const productName = product.querySelector(".product-name").textContent;
-      const productPrice = product.querySelector(".product-price").textContent;
+      const productPrice = parseFloat(
+        product.querySelector(".product-price").textContent.replace("€", "")
+      );
 
-      cartItems.push({
-        name: productName,
-        price: productPrice,
-      });
-      ///// Save cart items to localStorage, and save the updated array to localStorage
+      const existingItem = cartItems.find((item) => item.name === productName);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cartItems.push({
+          image: productImg,
+          name: productName,
+          price: productPrice,
+          quantity: 1,
+        });
+      }
+
       localStorage.setItem("cartItems", JSON.stringify(cartItems));
-      displayConfirmation(productName);
       updateCartDisplay();
+      updateCartCount();
+      displayConfirmation(productName);
     });
   });
-  ///////////////(5) Updating the cart's display
+
+//TODO  Update Cart Display Function ==================================
   function updateCartDisplay() {
+    totalPrice = 0;
+
     if (cartItems.length === 0) {
-      cartDisplay.textContent = "Your cart is empty.";
+      cartDisplay.innerHTML = "Your cart is empty.";
+      document.querySelector(".total-price").textContent = "€0";
     } else {
       cartDisplay.innerHTML = `
         <ul>
           ${cartItems
             .map(
               (item, index) => `
-              <li>
-                ${item.name} - ${item.price} 
+            <li>
+            <div class="item-content">
+                <img src="${item.image}" alt="${item.name}">
+                <div class="item-detail">
+                    <h4 class="item-name">${item.name}</h4>
+                    <span class="item-price">€${item.price}</span>
+                    <input type="number" value="${item.quantity}" min="1" class="quantity-input" data-index="${index}">
+                </div>
                 <span class="delete-item" data-index="${index}"><i class="fa-solid fa-trash"></i></span>
-              </li>`
+            </div>
+            </li>`
             )
             .join("")}
         </ul>
       `;
-      /////////////////////////////// Delete items from the cart
-      const itemDeleteBtns = document.querySelectorAll(".delete-item");
-      itemDeleteBtns.forEach(function (button) {
-        button.addEventListener("click", function () {
-          const index = button.getAttribute("data-index");
-          cartItems.splice(index, 1); // Remove item from cartItems
-          localStorage.setItem("cartItems", JSON.stringify(cartItems)); // Update localStorage
-          updateCartDisplay(); ////Refresh cart display after deletion
-        });
-      });
+      
+      //Calculating the Total Price
+      cartItems.forEach((item) => (totalPrice += item.price * item.quantity));
+      
+      //Updating the Total Price Display
+      document.querySelector(
+        ".total-price"
+      ).textContent = `€${totalPrice.toFixed(2)}`;
     }
+
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }
 
-  ////////////////(7) Message displayConfirmation
+  //TODO Update Cart Count Function =========================
+  
+  function updateCartCount() {
+    const totalItems = cartItems.reduce(
+      (count, item) => count + item.quantity,
+      0
+    );
+    cartItemCount.textContent = totalItems;
+  }
+
+//TODO Increase The Quantity Input ================
+  cartDisplay.addEventListener("change", function (event) {
+    if (event.target.classList.contains("quantity-input")) {
+      const index = event.target.getAttribute("data-index");
+      cartItems[index].quantity = parseInt(event.target.value) || 1;
+      updateCartDisplay();
+      updateCartCount();
+    }
+  });
+
+  //TODO Delete Items From The Cart ===============
+  cartDisplay.addEventListener("click", function (event) {
+    // Check if the click is on or inside a delete button
+    const deleteButton = event.target.closest(".delete-item");
+    if (deleteButton) {
+      const index = deleteButton.getAttribute("data-index"); // Get the data-index
+      cartItems.splice(index, 1); // Remove the item from cart
+      updateCartDisplay(); 
+      updateCartCount(); 
+    }
+  });
+
+  
+
+//TODO Message display Confirmation Function ================
+
   function displayConfirmation(productName) {
     const confirmation = document.createElement("div");
     confirmation.className = "confirmation-message";
@@ -235,7 +299,45 @@ document.addEventListener("DOMContentLoaded", function () {
       confirmation.remove();
     }, 3000);
   }
-
-  //////////////// (8) Load cart items from localStorage on page load
   updateCartDisplay();
+  updateCartCount();
+});
+
+//TODO===============================================
+//!Bonus Milestone: Add a search bar
+document.addEventListener("DOMContentLoaded", () => {
+  const searchBar = document.getElementById("searchInput"); // Search input
+  const productContainer = document.querySelector("section ul"); 
+
+  // Search functionality
+  searchBar.addEventListener("input", (event) => {
+    const searchQuery = event.target.value.toLowerCase();
+
+    // Filter products based on the search query
+    const filteredProducts = products.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery)
+    );
+
+    // Clear the product list and display only the filtered products
+    productContainer.innerHTML = "";
+    filteredProducts.forEach((product) => {
+      const productElement = document.createElement("li");
+      productElement.innerHTML = `
+      <div class="pro-card">
+                      <div class="image">
+                          <img src="${product.image}" alt="${product.name}">
+                      </div>
+                      <div class="des">
+                          <h4 class ="product-name">${product.name}</h4>
+                          <p>${product.description}</p>
+                          <div class="group-cart">
+                              <p class="product-price">${product.price}</p>
+                              <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
+                          </div>
+                      </div>
+                  </div>
+      `;
+      productContainer.appendChild(productElement);
+    });
+  });
 });

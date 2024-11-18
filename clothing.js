@@ -75,17 +75,16 @@ const products = [
 ];
 
 // Function to generate product elements
-
 function generateProductElements() {
-  //Creating a bunch of "product cards"
-  //(1) Looking for a specific place to put the cards (section/ul)
   const productContainer = document.querySelector("section ul");
+
   // Clear the product container to avoid duplicates
   productContainer.innerHTML = "";
+
   products.forEach((product) => {
-    const productElement = document.createElement("li"); //# Creating a new list item (li), like making an empty card     //# then Filling the product card
-    productElement.innerHTML = ` 
-     <div class="pro-card">
+    const productElement = document.createElement("li");
+    productElement.innerHTML = `
+   <div class="pro-card">
                     <div class="image">
                         <img src="${product.image}" alt="${product.name}">
                     </div>
@@ -99,30 +98,34 @@ function generateProductElements() {
                     </div>
                 </div>
     `;
-    productContainer.appendChild(productElement); //# Adding the card list(child) to the container(parent)
+    productContainer.appendChild(productElement);
   });
 }
 
 // Call the function to generate product elements when the DOM is fully loaded(meaning: wait until the page is ready before doing something)
 document.addEventListener("DOMContentLoaded", generateProductElements);
 
-/////////////////////////////////////////////////////////////////
-//Sorting The Products
+//TODO===============================================
+//!Milestone(2): Sorting Products
 
-document.addEventListener("DOMContentLoaded", () => {
+//* Sorting The Products
+document.addEventListener("DOMContentLoaded",function () {
   const sortDropdown = document.getElementById("sort");
-  const productList = document.querySelector(".pro-list");
-  const products = Array.from(productList.children);
+  const productList = document.querySelector("section ul");
 
-  sortDropdown.addEventListener("change", () => {
-    const sortOrder = sortDropdown.value;
+  sortDropdown.addEventListener("change", function () {
+    const sortOrder = sortDropdown.value; // Get "asc" or "desc" from the dropdown
 
-    const sortedProducts = products.sort((a, b) => {
+    // Turn product items(li) into an array
+    const products = Array.from(productList.children);
+
+    // Sorting the products by price
+    const sortedProducts = products.sort(function (a, b) {
       const priceA = parseFloat(
-        a.querySelector(".price").textContent.replace("€", "")
+        a.querySelector(".product-price").textContent.replace("€", "")
       );
       const priceB = parseFloat(
-        b.querySelector(".price").textContent.replace("€", "")
+        b.querySelector(".product-price").textContent.replace("€", "")
       );
 
       if (sortOrder === "asc") {
@@ -133,28 +136,66 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // Clear the product list
-    while (productList.firstChild) {
-      productList.removeChild(productList.firstChild);
-    }
+    productList.innerHTML = "";
 
-    // Append the sorted products
-    sortedProducts.forEach((product) => {
-      productList.appendChild(product);
+    // Add the sorted products back to the page
+    sortedProducts.forEach((product) => productList.appendChild(product));
+  });
+});
+
+
+
+//TODO===============================================
+//!Bonus Milestone: Add a search bar
+document.addEventListener("DOMContentLoaded", () => {
+  const searchBar = document.getElementById("searchInput"); // Search input
+  const productContainer = document.querySelector("section ul"); // Product list container
+
+  // Search functionality
+  searchBar.addEventListener("input", (event) => {
+    const searchQuery = event.target.value.toLowerCase();
+
+    // Filter products based on the search query
+    const filteredProducts = products.filter((product) =>
+      product.name.toLowerCase().includes(searchQuery)
+    );
+
+    // Clear the product list and display only the filtered products
+    productContainer.innerHTML = "";
+    filteredProducts.forEach((product) => {
+      const productElement = document.createElement("li");
+      productElement.innerHTML = `
+      <div class="pro-card">
+                      <div class="image">
+                          <img src="${product.image}" alt="${product.name}">
+                      </div>
+                      <div class="des">
+                          <h4 class ="product-name">${product.name}</h4>
+                          <p>${product.description}</p>
+                          <div class="group-cart">
+                              <p class="product-price">${product.price}</p>
+                              <a href="#" class="product-buy"><i class="fa-solid fa-cart-plus"></i></a>
+                          </div>
+                      </div>
+                  </div>
+      `;
+      productContainer.appendChild(productElement);
     });
   });
 });
 
-/////////////////////////////////////////////////////////////
-//Milestone 3
+//TODO =================================================
+//!Milestone(3): Add items to the cart
+
 document.addEventListener("DOMContentLoaded", function () {
-  /////// (1) Get the element we need
   const modalCart = document.getElementById("modalCart");
   const closeBtn = document.getElementsByClassName("modal-cart-close")[0];
   const cartDisplay = document.querySelector(".modal-cart-content p");
   const cartLink = document.getElementById("cartLink");
-  let cartItems = JSON.parse(localStorage.getItem("cartItems")) || []; // Load cart items from localStorage or make a  empty array if there’s no data in localStorage
+  const cartItemCount = document.getElementById("cartItemCount");
+  const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
+  let totalPrice = 0;
 
-  ///////// (2)Click on the cart icon in the navbar to open the modal
   cartLink.onclick = function () {
     modalCart.style.display = "block";
     setTimeout(function () {
@@ -162,14 +203,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }, 10);
     updateCartDisplay();
   };
-  ///////// (3)Close the cart model by x
+
   closeBtn.onclick = function () {
     modalCart.classList.remove("show");
     setTimeout(function () {
       modalCart.style.display = "none";
     }, 300);
   };
-  ///////// (3)Close the cart model when click outside
+
   window.onclick = function (event) {
     if (event.target == modalCart) {
       modalCart.classList.remove("show");
@@ -178,55 +219,99 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 300);
     }
   };
-  ////////////////////////(4) Add to cart icon
+
   const addToCartButtons = document.querySelectorAll(".product-buy");
   addToCartButtons.forEach(function (button) {
     button.addEventListener("click", function (event) {
       const product = event.target.closest(".pro-card");
+      const productImg = product.querySelector(".image img");
       const productName = product.querySelector(".product-name").textContent;
-      const productPrice = product.querySelector(".product-price").textContent;
+      const productPrice = parseFloat(
+        product.querySelector(".product-price").textContent.replace("€", "")
+      );
 
-      cartItems.push({
-        name: productName,
-        price: productPrice,
-      });
-      ///// Save cart items to localStorage after adding to cart so that the cart items persist even after the user navigates to another page or reloads the page.
-      localStorage.setItem("cartItems", JSON.stringify(cartItems));   //Saves data in localStorage under a specified key "cartItems".
-      displayConfirmation(productName);
+      const existingItem = cartItems.find((item) => item.name === productName);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cartItems.push({
+          image: productImg.src,
+          name: productName,
+          price: productPrice,
+          quantity: 1,
+        });
+      }
+
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
       updateCartDisplay();
+      updateCartCount();
+      displayConfirmation(productName);
     });
   });
-  ///////////////(5) Updating the cart's display
+
   function updateCartDisplay() {
+    totalPrice = 0;
+
     if (cartItems.length === 0) {
-      cartDisplay.textContent = "Your cart is empty.";
+      cartDisplay.innerHTML = "Your cart is empty.";
+      document.querySelector(".total-price").textContent = "€0";
     } else {
       cartDisplay.innerHTML = `
         <ul>
           ${cartItems
             .map(
               (item, index) => `
-              <li>
-                ${item.name} - ${item.price} 
+            <li>
+            <div class="item-content">
+                <img src="${item.image}" alt="${item.name}">
+                <div class="item-detail">
+                    <h4 class="item-name">${item.name}</h4>
+                    <span class="item-price">€${item.price}</span>
+                    <input type="number" value="${item.quantity}" min="1" class="quantity-input" data-index="${index}">
+                </div>
                 <span class="delete-item" data-index="${index}"><i class="fa-solid fa-trash"></i></span>
-              </li>`
+            </div>
+            </li>`
             )
             .join("")}
         </ul>
       `;
-      /////////////////////////////// Delete items from the cart
-      const itemDeleteBtns = document.querySelectorAll(".delete-item");
-      itemDeleteBtns.forEach(function (button) {
-        button.addEventListener("click", function () {
-          const index = button.getAttribute("data-index");
-          cartItems.splice(index, 1); // Remove item from cartItems
-          localStorage.setItem("cartItems", JSON.stringify(cartItems)); // Update localStorage
-          updateCartDisplay(); ////Refresh cart display after deletion
-        });
-      });
+
+      cartItems.forEach((item) => (totalPrice += item.price * item.quantity));
+      document.querySelector(
+        ".total-price"
+      ).textContent = `€${totalPrice.toFixed(2)}`;
     }
+
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
   }
 
+  function updateCartCount() {
+    const totalItems = cartItems.reduce(
+      (count, item) => count + item.quantity,
+      0
+    );
+    cartItemCount.textContent = totalItems;
+  }
+
+  cartDisplay.addEventListener("change", function (event) {
+    if (event.target.classList.contains("quantity-input")) {
+      const index = event.target.getAttribute("data-index");
+      cartItems[index].quantity = parseInt(event.target.value) || 1;
+      updateCartDisplay();
+      updateCartCount();
+    }
+  });
+
+  cartDisplay.addEventListener("click", function (event) {
+    // Check if the delete icon or its parent was clicked
+    if (event.target.closest(".delete-item")) {
+      const index = event.target.closest(".delete-item").dataset.index;
+      cartItems.splice(index, 1); // Remove item from cart
+      updateCartDisplay(); // Update the cart display
+      updateCartCount(); // Update the item count
+    }
+  });
   ////////////////(7) Message displayConfirmation
   function displayConfirmation(productName) {
     const confirmation = document.createElement("div");
@@ -238,7 +323,14 @@ document.addEventListener("DOMContentLoaded", function () {
       confirmation.remove();
     }, 3000);
   }
-
-  //////////////// (8) Load cart items from localStorage on page load
   updateCartDisplay();
+  updateCartCount();
 });
+
+
+
+  
+
+
+
+

@@ -22,13 +22,36 @@
             <li><a href="index.html">Home</a></li>
             <li><a href="clothing.html">Clothing</a></li>
             <li><a class="active" href="electronics.html">Electronics</a></li>
-            <li id="cartLink"><a href="#"><i class="fa-solid fa-cart-shopping"></i></a></li>
+            <li id="cartLink">
+                <div class="cart">
+                    <a href="#"><i class="fa-solid fa-bag-shopping"></i></a>
+                    <span class="cart-amount" id="cartItemCount">0</span>
+                </div>
+            </li>
         </ul>
     </header>
+    <!--Model Cart-->
+    <div id="modalCart" class="modal-cart">
+        <div class="modal-cart-content">
+            <span class="modal-cart-close">&times;</span>
+            <h1>Your Cart</h1>
+            <p>...</p> <!-- Placeholder for cart items -->
+            <div class="total">
+                <h3 class="total-title">Total:</h3>
+                <span class="total-price">€0</span>
+            </div>
+        </div>
+    </div>
+
     <!--Products Section-->
     <section class="products-section">
         <h2>Our Products</h2>
-        <!--Products Section / Sorting Products-->
+
+        <!--Products Section /Searching and Sorting Products-->
+        <div class="additional-features">
+            <div class="searching">
+                <input type="text" id="searchInput" class="search-bar" placeholder="Search products...">
+            </div>
             <div class="sorting">
                 <label for="sort">Sort by Price:</label>
                 <select name="sort" id="sort" class="sort-dropdown">
@@ -36,9 +59,9 @@
                     <option value="desc">Descending</option>
                 </select>
             </div>
-        
+        </div>
         <ul class="pro-list">
-            <li>
+            <!-- <li>
                 <div class="pro-card">
                     <div class="image">
                         <img src="Images/Products/10.png" alt="Bluetooth Speaker">
@@ -188,17 +211,9 @@
                         </div>
                     </div>
                 </div>
-            </li>
+            </li> -->
         </ul>
     </section>
-    <!--Model Cart-->
-    <div id="modalCart" class="modal-cart">
-        <div class="modal-cart-content">
-            <span class="modal-cart-close">&times;</span>
-            <h1>Cart</h1>
-            <p>...</p>
-        </div>
-    </div>
     <!--Banner Section-->
     <section class="banner-two">
         <div class="banner-box three">
@@ -261,7 +276,8 @@
             <p>&copy; 2024 TAN. All Rights Reserved.</p>
         </div>
     </footer>
-    <script src="electronics.js"></script>
+    <script src="electronics.js"></script> 
+   
 </body>
 
 </html>
